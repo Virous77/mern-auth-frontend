@@ -1,0 +1,52 @@
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 5rem;
+  background-color: rgb(234, 234, 252);
+}
+
+nav h1 a {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  color: #323232;
+}
+
+nav ul {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+nav li {
+  padding: 4px 15px;
+  border-radius: 3px;
+  background-color: blueviolet;
+  color: white;
+  cursor: pointer;
+}
+
+nav li a {
+  color: white;
+}
+
+footer {
+  padding: 10px;
+  text-align: center;
+  background-color: rgb(238, 238, 252);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+}
+
+footer p {
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  nav {
+    padding: 1rem;
+  }
+}
