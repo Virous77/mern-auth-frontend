@@ -5,6 +5,8 @@ import {
   LandingPage,
   ForgetPassPage,
   ResetPassPage,
+  ProfilePage,
+  VerifyPage,
 } from "./pages/index";
 import Navbar from "./components/Layout/Navbar";
 import Footer from "./components/Layout/Footer";
@@ -14,16 +16,15 @@ import LoginCode from "./components/Auth/LoginCode";
 
 const App = () => {
   return (
-    <main>
+    <main className="app">
       <Navbar />
-      {/* <Login /> */}
-      {/* <Register /> */}
-      <LoginCode />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/landing" element={<LandingPage />} />
         <Route path="/forget" element={<ForgetPassPage />} />
         <Route path="/reset/:id" element={<ResetPassPage />} />
+        <Route path="/*" element={<ProfilePage />} />
+        <Route path="/verify/:id" element={<VerifyPage />} />
       </Routes>
       <Footer />
     </main>

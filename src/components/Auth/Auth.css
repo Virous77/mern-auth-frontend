@@ -111,6 +111,13 @@
   opacity: 0.8;
 }
 
+.verify-button {
+  background-color: blueviolet;
+  padding: 7px 20px;
+  border-radius: 3px;
+  font-size: 1rem;
+}
+
 @media (max-width: 640px) {
   .login {
     width: 95%;

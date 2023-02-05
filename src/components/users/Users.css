@@ -1,0 +1,134 @@
+.users {
+  max-width: 1200px;
+  margin: auto;
+}
+
+.statsMain {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.first {
+  background-color: blueviolet;
+}
+
+.second {
+  background-color: rgb(123, 249, 207);
+}
+
+.third {
+  background-color: orange;
+}
+
+.fourth {
+  background-color: red;
+}
+
+.statList {
+  display: grid;
+  align-items: flex-start;
+  grid-template-columns: 50px 1fr;
+  gap: 2rem;
+  justify-content: center;
+  border-radius: 5px;
+  box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.2);
+  transition: scale 300ms ease-in-out;
+}
+
+.statList p {
+  font-size: 2rem;
+  justify-self: flex-end;
+}
+
+.statList:hover {
+  scale: 1.03;
+}
+
+.searchMain {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.searchMain input {
+  border: 2px solid silver;
+  padding: 7px;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.searchMain input:focus {
+  border: 2px solid blueviolet;
+}
+
+table {
+  width: 100%;
+}
+
+.user-table tr {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 40px repeat(4, 1fr) 60px;
+  gap: 1rem;
+  width: 100%;
+  padding: 5px 20px;
+}
+
+.user-table thead tr {
+  border-top: 2px solid blueviolet;
+  border-bottom: 2px solid blueviolet;
+}
+
+.user-table td {
+  justify-self: center;
+}
+
+.delete {
+  transition: scale 200ms ease-in-out;
+}
+
+.delete:active {
+  scale: 0.97;
+}
+
+.delete:hover {
+  scale: 1.03;
+}
+
+.role {
+  gap: 0.5rem;
+}
+
+.role select {
+  width: 100%;
+  padding: 4px;
+  border: 2px solid silver;
+}
+
+@media (max-width: 920px) {
+  .statsMain {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .user-table {
+    overflow-x: scroll;
+  }
+
+  .user-table tr {
+    width: 920px;
+  }
+
+  .user-table::-webkit-scrollbar {
+    width: 0;
+    display: none;
+    scroll-behavior: smooth;
+  }
+}
+
+@media (max-width: 520px) {
+  .statsMain {
+    grid-template-columns: 1fr;
+  }
+}
