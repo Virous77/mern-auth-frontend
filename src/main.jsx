@@ -6,15 +6,24 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./components/Redux/store";
 import axios from "axios";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+import { GlobalContextProvider } from "./components/store/globalContext";
 
 axios.defaults.withCredentials = true;
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
-      <Provider store={store}>
-        <App />
-      </Provider>
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <GlobalContextProvider>
+            <App />
+          </GlobalContextProvider>
+          <ReactQueryDevtools />
+        </Provider>
+      </QueryClientProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

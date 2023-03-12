@@ -7,7 +7,11 @@ export const registerUser = createAsyncThunk(
     try {
       return await register(userData);
     } catch (error) {
-      console.log(error);
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message.toString();
+      return thunkAPI.rejectWithValue(message);
     }
   }
 );

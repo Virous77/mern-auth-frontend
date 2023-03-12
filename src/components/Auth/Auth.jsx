@@ -15,6 +15,7 @@ const Auth = ({
   char,
   number,
   caseL,
+  status,
 }) => {
   return (
     <>
@@ -69,8 +70,13 @@ const Auth = ({
             </span>
           )}
 
-          <button className="onClick" type="button" onClick={handleFormSave}>
-            {title}
+          <button
+            className="onClick"
+            type="button"
+            onClick={handleFormSave}
+            disabled={status}
+          >
+            {status ? "Processing" : title}
           </button>
         </form>
 
@@ -78,7 +84,11 @@ const Auth = ({
           {title === "Sign Up"
             ? "Already have an account?"
             : "Don't have an account?"}
-          <span>{title === "Sign Up" ? " Login" : " Register"}</span>
+          <span>
+            <Link to={title === "Sign Up" ? "/login" : "/register"}>
+              {title === "Sign Up" ? " Login" : " Register"}
+            </Link>
+          </span>
         </p>
       </section>
     </>

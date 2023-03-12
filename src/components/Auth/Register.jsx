@@ -1,5 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Auth from "./Auth";
+import { useGlobalContext } from "../store/globalContext";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { registerUser } from "../Redux/slices/authSlice/authThunk";
+import { RESET } from "../Redux/slices/authSlice/authSlice";
 
 const Register = () => {
   const [loginData, setLoginData] = useState({
@@ -8,16 +13,19 @@ const Register = () => {
     name: "",
     confirmPassword: "",
   });
+  const { handleNotification } = useGlobalContext();
+  const { isLoading, isLoggedIn, message, isError } = useSelector(
+    (state) => state.auth
+  );
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLoginData({ ...loginData, [name]: value });
   };
 
-  const handleFormSave = () => {
-    console.log(loginData);
-  };
-
+  ////Password strength logic
   const number = loginData.password.match(/([0-9])/) !== null ? true : false;
   const caseL =
     loginData.password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/) !== null
@@ -28,6 +36,41 @@ const Register = () => {
       ? true
       : false;
   const passLength = loginData.password.length >= 8 ? true : false;
+
+  //Register User Function
+  const handleFormSave = () => {
+    const { email, password, name, confirmPassword } = loginData;
+
+    if (password !== confirmPassword) {
+      handleNotification({
+        message: "Password do not match,Try again",
+        status: "error",
+      });
+      return;
+    }
+
+    const userData = {
+      name,
+      email,
+      password,
+    };
+    dispatch(registerUser(userData));
+  };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/");
+      dispatch(RESET());
+    }
+
+    if (isError) {
+      handleNotification({
+        message,
+        status: "error",
+      });
+      dispatch(RESET());
+    }
+  }, [isLoggedIn, isError, dispatch, message]);
 
   return (
     <Auth
@@ -41,6 +84,7 @@ const Register = () => {
       number={number}
       passLength={passLength}
       char={char}
+      status={isLoading}
     />
   );
 };
