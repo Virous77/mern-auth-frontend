@@ -57,12 +57,14 @@ const Auth = ({
               name={name2}
             />
           )}
-          <ValidatePassword
-            char={char}
-            number={number}
-            passLength={passLength}
-            caseL={caseL}
-          />
+          {title === "Sign Up" && (
+            <ValidatePassword
+              char={char}
+              number={number}
+              passLength={passLength}
+              caseL={caseL}
+            />
+          )}
 
           {title === "Login" && (
             <span className="forgetPass">

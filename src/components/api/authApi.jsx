@@ -8,3 +8,15 @@ export const register = async (userData) => {
 
   return data;
 };
+
+export const login = async (userData) => {
+  const { data } = await axios.post(`${API_URL}/login`, userData);
+
+  return data;
+};
+
+export const logout = async () => {
+  const { data } = await axios.get(`${API_URL}/logout`);
+
+  return data;
+};

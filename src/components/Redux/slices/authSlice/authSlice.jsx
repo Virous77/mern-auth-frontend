@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { registerUser } from "./authThunk";
+import { registerUser, loginUser, logoutUser } from "./authThunk";
 
 const initialState = {
   isLoggedIn: false,
@@ -31,6 +31,7 @@ const authSlice = createSlice({
   },
   extraReducers(builder) {
     builder
+      //Register user
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
       })
@@ -44,6 +45,39 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.user = null;
+        state.message = action.payload;
+      })
+
+      //Login user
+      .addCase(loginUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isLoggedIn = true;
+        state.user = action.payload;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.user = null;
+        state.message = action.payload;
+      })
+
+      //logout
+      .addCase(logoutUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(logoutUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isLoggedIn = false;
+        state.message = action.payload;
+      })
+      .addCase(logoutUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
         state.message = action.payload;
       });
   },

@@ -49,6 +49,14 @@ const Register = () => {
       return;
     }
 
+    if (!number || !caseL || !char || !passLength) {
+      handleNotification({
+        message: "Password must need to match the strength criteria!",
+        status: "error",
+      });
+      return;
+    }
+
     const userData = {
       name,
       email,
@@ -59,7 +67,7 @@ const Register = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate("/");
+      navigate("/profile");
       dispatch(RESET());
     }
 
