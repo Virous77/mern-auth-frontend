@@ -1,11 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Profile.css";
 import ProfileForm from "./ProfileForm";
 import Image from "./Image";
+import axios from "axios";
 
 const Profile = () => {
   const [userImage, setUserImage] = useState(null);
   const [edit, setEdit] = useState(false);
+
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const API_URL = `${BACKEND_URL}/api-v1/users`;
+  const userStatus = async () => {
+    const { data } = await axios.get(`${API_URL}/login-status`);
+
+    console.log(data);
+    return data;
+  };
+
+  useEffect(() => {
+    userStatus();
+  }, []);
 
   const initialState = {
     name: "Reetesh Kumar",

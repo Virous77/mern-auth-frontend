@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { registerUser, loginUser, logoutUser } from "./authThunk";
+import {
+  registerUser,
+  loginUser,
+  logoutUser,
+  getUserStatus,
+} from "./authThunk";
 
 const initialState = {
   isLoggedIn: false,
@@ -77,6 +82,16 @@ const authSlice = createSlice({
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+
+      //get user status
+
+      .addCase(getUserStatus.fulfilled, (state, action) => {
+        state.isLoggedIn = action.payload;
+      })
+      .addCase(getUserStatus.rejected, (state, action) => {
         state.isError = true;
         state.message = action.payload;
       });

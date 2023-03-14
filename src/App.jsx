@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import {
   HomePage,
@@ -15,9 +15,17 @@ import Register from "./components/Auth/Register";
 import LoginCode from "./components/Auth/LoginCode";
 import Notification from "./components/notification/Notification";
 import { useGlobalContext } from "./components/store/globalContext";
+import { getUserStatus } from "./components/Redux/slices/authSlice/authThunk";
+import { useSelector, useDispatch } from "react-redux";
 
 const App = () => {
-  const { notification } = useGlobalContext();
+  const { notification, handleNotification } = useGlobalContext();
+  const dispatch = useDispatch();
+  const { isLoggedIn, message, isError } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(getUserStatus());
+  }, [isLoggedIn, message, isError]);
 
   return (
     <main className="app">

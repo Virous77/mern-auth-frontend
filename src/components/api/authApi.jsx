@@ -20,3 +20,9 @@ export const logout = async () => {
 
   return data;
 };
+
+export const userStatus = async () => {
+  const { data } = await axios.get(`${API_URL}/login-status`);
+
+  return data;
+};
