@@ -14,7 +14,7 @@ const Register = () => {
     confirmPassword: "",
   });
   const { handleNotification } = useGlobalContext();
-  const { isLoading, isLoggedIn, message, isError } = useSelector(
+  const { isLoading, isLoggedIn, message, isError, user } = useSelector(
     (state) => state.auth
   );
   const navigate = useNavigate();
@@ -68,7 +68,6 @@ const Register = () => {
   useEffect(() => {
     if (isLoggedIn) {
       navigate("/profile");
-      dispatch(RESET());
     }
 
     if (isError) {
@@ -78,7 +77,11 @@ const Register = () => {
       });
       dispatch(RESET());
     }
-  }, [isLoggedIn, isError, dispatch, message]);
+
+    if (user) {
+      localStorage.setItem("authId", JSON.stringify(user._id));
+    }
+  }, [isLoggedIn, isError, dispatch, message, user]);
 
   return (
     <Auth

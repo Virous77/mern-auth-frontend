@@ -1,25 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./Profile.css";
 import ProfileForm from "./ProfileForm";
 import Image from "./Image";
-import axios from "axios";
+import { useSelector } from "react-redux";
+import { useSelectUser } from "../Redux/slices/authSlice/authSlice";
 
 const Profile = () => {
   const [userImage, setUserImage] = useState(null);
   const [edit, setEdit] = useState(false);
+  const user = useSelector(useSelectUser);
 
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-  const API_URL = `${BACKEND_URL}/api-v1/users`;
-  const userStatus = async () => {
-    const { data } = await axios.get(`${API_URL}/login-status`);
-
-    console.log(data);
-    return data;
-  };
-
-  useEffect(() => {
-    userStatus();
-  }, []);
+  console.log(user);
 
   const initialState = {
     name: "Reetesh Kumar",

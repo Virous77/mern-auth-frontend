@@ -13,7 +13,7 @@ const Login = () => {
   });
 
   const { handleNotification } = useGlobalContext();
-  const { isLoading, isLoggedIn, message, isError } = useSelector(
+  const { isLoading, isLoggedIn, message, isError, user } = useSelector(
     (state) => state.auth
   );
   const navigate = useNavigate();
@@ -37,7 +37,6 @@ const Login = () => {
   useEffect(() => {
     if (isLoggedIn) {
       navigate("/profile");
-      dispatch(RESET());
     }
 
     if (isError) {
@@ -47,7 +46,11 @@ const Login = () => {
       });
       dispatch(RESET());
     }
-  }, [isLoggedIn, isError, dispatch, message]);
+
+    if (user) {
+      localStorage.setItem("authId", JSON.stringify(user._id));
+    }
+  }, [isError, isLoggedIn, dispatch, message, user]);
 
   return (
     <Auth
@@ -56,6 +59,7 @@ const Login = () => {
       handleChange={handleChange}
       handleFormSave={handleFormSave}
       name="password"
+      status={isLoading}
     />
   );
 };

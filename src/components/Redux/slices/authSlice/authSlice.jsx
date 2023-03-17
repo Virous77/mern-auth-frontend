@@ -12,7 +12,6 @@ const initialState = {
   users: [],
   twoFactor: false,
   isError: false,
-  isSuccess: false,
   isLoading: false,
   message: "",
   verifiedUser: "",
@@ -28,7 +27,6 @@ const authSlice = createSlice({
       state.users = [];
       state.twoFactor = false;
       state.isError = false;
-      state.isSuccess = false;
       state.isLoading = false;
       state.message = "";
       state.verifiedUser = "";
@@ -42,14 +40,12 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = true;
         state.isLoggedIn = true;
         state.user = action.payload;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.user = null;
         state.message = action.payload;
       })
 
@@ -59,14 +55,12 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = true;
         state.isLoggedIn = true;
         state.user = action.payload;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.user = null;
         state.message = action.payload;
       })
 
@@ -76,7 +70,6 @@ const authSlice = createSlice({
       })
       .addCase(logoutUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = true;
         state.isLoggedIn = false;
         state.message = action.payload;
       })
@@ -87,9 +80,9 @@ const authSlice = createSlice({
       })
 
       //get user status
-
       .addCase(getUserStatus.fulfilled, (state, action) => {
-        state.isLoggedIn = action.payload;
+        state.isLoggedIn = action.payload.status;
+        state.user = action.payload.user ? action.payload.user : null;
       })
       .addCase(getUserStatus.rejected, (state, action) => {
         state.isError = true;
@@ -101,5 +94,6 @@ const authSlice = createSlice({
 export const { RESET } = authSlice.actions;
 
 export const useSelectIsLoggedIn = (state) => state.auth.isLoggedIn;
+export const useSelectUser = (state) => state.auth.user;
 
 export default authSlice.reducer;

@@ -51,9 +51,7 @@ export const getUserStatus = createAsyncThunk(
   "auth/getUserStatus",
   async (_, thunkAPI) => {
     try {
-      const status = await userStatus();
-      console.log(status);
-      return thunkAPI.fulfillWithValue(status);
+      return await userStatus();
     } catch (error) {
       const message =
         error.response && error.response.data.message

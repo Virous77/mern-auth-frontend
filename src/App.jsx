@@ -21,11 +21,11 @@ import { useSelector, useDispatch } from "react-redux";
 const App = () => {
   const { notification, handleNotification } = useGlobalContext();
   const dispatch = useDispatch();
-  const { isLoggedIn, message, isError } = useSelector((state) => state.auth);
+  const { isLoggedIn } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getUserStatus());
-  }, [isLoggedIn, message, isError]);
+  }, [isLoggedIn]);
 
   return (
     <main className="app">

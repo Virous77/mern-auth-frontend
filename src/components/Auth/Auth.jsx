@@ -1,6 +1,6 @@
 import React from "react";
 import "./Auth.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Password from "./Password";
 import ValidatePassword from "./ValidatePassword";
 
@@ -17,9 +17,10 @@ const Auth = ({
   caseL,
   status,
 }) => {
+  const navigate = useNavigate();
   return (
     <>
-      <div className="overLay" />
+      <div className="overLay" onClick={() => navigate("/landing")} />
       <section className="login">
         <h1>{title}</h1>
 

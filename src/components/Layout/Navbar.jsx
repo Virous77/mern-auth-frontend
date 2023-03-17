@@ -5,6 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../Redux/slices/authSlice/authThunk";
 import { useGlobalContext } from "../store/globalContext";
 import { RESET } from "../Redux/slices/authSlice/authSlice";
+import {
+  ProtectedUserLogin,
+  ProtectedUserLoggedIn,
+} from "../PrivateRoutes/PrivateRoutes";
 
 const Navbar = () => {
   const { handleNotification } = useGlobalContext();
@@ -18,8 +22,9 @@ const Navbar = () => {
 
   useEffect(() => {
     if (message === "Logout successful") {
-      navigate("/landing");
+      localStorage.removeItem("authId");
       dispatch(RESET());
+      navigate("/landing");
     }
 
     if (message) {
@@ -38,11 +43,21 @@ const Navbar = () => {
       </h1>
 
       <ul>
-        <li>
-          <Link to="/profile">Profile</Link>
-        </li>
-        <li>Login</li>
-        <li onClick={handleLogout}>Logout</li>
+        <ProtectedUserLogin>
+          <li>
+            <Link to="/profile">Profile</Link>
+          </li>
+        </ProtectedUserLogin>
+
+        <ProtectedUserLoggedIn>
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+        </ProtectedUserLoggedIn>
+
+        <ProtectedUserLogin>
+          <li onClick={handleLogout}>Logout</li>
+        </ProtectedUserLogin>
       </ul>
     </nav>
   );
