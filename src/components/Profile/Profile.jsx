@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Profile.css";
 import ProfileForm from "./ProfileForm";
 import Image from "./Image";
@@ -10,14 +10,12 @@ const Profile = () => {
   const [edit, setEdit] = useState(false);
   const user = useSelector(useSelectUser);
 
-  console.log(user);
-
   const initialState = {
-    name: "Reetesh Kumar",
-    email: "Mohit12@gmail.com",
-    mobile: 8210830957,
-    bio: "I'm cool Boy!",
-    verified: "admin",
+    name: user?.name,
+    email: user?.email,
+    mobile: user?.phone,
+    bio: user?.bio,
+    verified: user?.isVerified,
   };
 
   const [userData, setUserData] = useState(initialState);
@@ -26,6 +24,18 @@ const Profile = () => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
   };
+
+  useEffect(() => {
+    const data = {
+      name: user?.name,
+      email: user?.email,
+      mobile: user?.phone,
+      bio: user?.bio,
+      verified: user?.isVerified,
+    };
+    setUserData(data);
+    setUserImage(user?.photo);
+  }, [user]);
 
   return (
     <>
@@ -43,8 +53,8 @@ const Profile = () => {
           --text-uppercase --primary-font-color
           "
           >
-            <p className="--margin-bottom-EL">Reetesh Kumar</p>
-            <span className="--font-sm">Role: admin</span>
+            <p className="--margin-bottom-EL">{user?.name}</p>
+            <span className="--font-sm">Role: {user?.role}</span>
           </div>
 
           <span onClick={() => setEdit(!edit)} className="edit-profile">

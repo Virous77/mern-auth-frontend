@@ -5,12 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../Redux/slices/authSlice/authThunk";
 import { useGlobalContext } from "../store/globalContext";
 import { RESET } from "../Redux/slices/authSlice/authSlice";
-import {
-  ProtectedUserLogin,
-  ProtectedUserLoggedIn,
-} from "../PrivateRoutes/PrivateRoutes";
 
-const Navbar = () => {
+const Navbar = ({ isLoggedIn }) => {
   const { handleNotification } = useGlobalContext();
   const { message } = useSelector((state) => state.auth);
   const navigate = useNavigate();
@@ -43,21 +39,19 @@ const Navbar = () => {
       </h1>
 
       <ul>
-        <ProtectedUserLogin>
+        {isLoggedIn && (
           <li>
             <Link to="/profile">Profile</Link>
           </li>
-        </ProtectedUserLogin>
+        )}
 
-        <ProtectedUserLoggedIn>
+        {!isLoggedIn && (
           <li>
             <Link to="/login">Login</Link>
           </li>
-        </ProtectedUserLoggedIn>
+        )}
 
-        <ProtectedUserLogin>
-          <li onClick={handleLogout}>Logout</li>
-        </ProtectedUserLogin>
+        {isLoggedIn && <li onClick={handleLogout}>Logout</li>}
       </ul>
     </nav>
   );

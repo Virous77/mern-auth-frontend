@@ -1,19 +1,14 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { useSelectIsLoggedIn } from "../Redux/slices/authSlice/authSlice";
+import { Navigate } from "react-router-dom";
 
-export const ProtectedUserLogin = ({ children }) => {
-  const isLoggedIn = useSelector(useSelectIsLoggedIn);
+const ProtectedUserLogin = ({ children }) => {
+  const t = localStorage.getItem("authId");
 
-  if (!isLoggedIn) return null;
-
-  if (isLoggedIn) return children;
+  if (t) {
+    return children;
+  } else {
+    return <Navigate to="/landing" />;
+  }
 };
 
-export const ProtectedUserLoggedIn = ({ children }) => {
-  const isLoggedIn = useSelector(useSelectIsLoggedIn);
-
-  if (isLoggedIn) return null;
-
-  if (!isLoggedIn) return children;
-};
+export default ProtectedUserLogin;

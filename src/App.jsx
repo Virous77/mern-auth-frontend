@@ -17,6 +17,7 @@ import Notification from "./components/notification/Notification";
 import { useGlobalContext } from "./components/store/globalContext";
 import { getUserStatus } from "./components/Redux/slices/authSlice/authThunk";
 import { useSelector, useDispatch } from "react-redux";
+import ProtectedUserLogin from "./components/PrivateRoutes/PrivateRoutes";
 
 const App = () => {
   const { notification, handleNotification } = useGlobalContext();
@@ -29,7 +30,7 @@ const App = () => {
 
   return (
     <main className="app">
-      <Navbar />
+      <Navbar isLoggedIn={isLoggedIn} />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/landing" element={<LandingPage />} />
@@ -37,7 +38,14 @@ const App = () => {
         <Route path="login" element={<Login />} />
         <Route path="/forget" element={<ForgetPassPage />} />
         <Route path="/reset/:id" element={<ResetPassPage />} />
-        <Route path="/*" element={<ProfilePage />} />
+        <Route
+          path="/*"
+          element={
+            <ProtectedUserLogin>
+              <ProfilePage />
+            </ProtectedUserLogin>
+          }
+        />
         <Route path="/verify/:id" element={<VerifyPage />} />
       </Routes>
       {notification && <Notification />}
