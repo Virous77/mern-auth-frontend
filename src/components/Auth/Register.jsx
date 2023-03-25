@@ -3,7 +3,10 @@ import Auth from "./Auth";
 import { useGlobalContext } from "../store/globalContext";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { registerUser } from "../Redux/slices/authSlice/authThunk";
+import {
+  registerUser,
+  getSendVerificationEmail,
+} from "../Redux/slices/authSlice/authThunk";
 import { RESET } from "../Redux/slices/authSlice/authSlice";
 
 const Register = () => {
@@ -68,6 +71,7 @@ const Register = () => {
   useEffect(() => {
     if (isLoggedIn) {
       navigate("/profile");
+      dispatch(getSendVerificationEmail());
     }
 
     if (isError) {
@@ -78,8 +82,12 @@ const Register = () => {
       dispatch(RESET());
     }
 
+    const validate = `${new Date(Date.now() + 1000 * 86400).getTime()}${
+      user?._id
+    }`;
+
     if (user) {
-      localStorage.setItem("authId", JSON.stringify(user._id));
+      localStorage.setItem("authId", JSON.stringify(validate));
     }
   }, [isLoggedIn, isError, dispatch, message, user]);
 

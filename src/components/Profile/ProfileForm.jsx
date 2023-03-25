@@ -1,6 +1,13 @@
 import React from "react";
 
-const ProfileForm = ({ setEdit, edit, handleChange, userData }) => {
+const ProfileForm = ({
+  setEdit,
+  edit,
+  handleChange,
+  userData,
+  handleSubmit,
+  isLoading,
+}) => {
   return (
     <div className="form">
       <form
@@ -70,8 +77,9 @@ const ProfileForm = ({ setEdit, edit, handleChange, userData }) => {
             <button
               style={{ backgroundColor: "blueviolet", color: "whitesmoke" }}
               type="button"
+              onClick={handleSubmit}
             >
-              Update Profile
+              {isLoading ? "Processing" : "Update Profile"}
             </button>
           </div>
         )}

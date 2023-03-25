@@ -1,14 +1,24 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getSendVerificationEmail } from "../Redux/slices/authSlice/authThunk";
 
 const Verify = () => {
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.auth);
   return (
-    <section className="--flex-center --flex-direction --margin-top-one">
-      <h1>Account Verification</h1>
-      <p className="--font-sm">
-        To verify your account, click the button below..{" "}
-      </p>
-      <button className="--margin-top-one --primary-font-color verify-button ">
-        Verify Account
+    <section className="--flex-center --margin-top-one --justify-content --gap-two">
+      <div>
+        <h1>Message</h1>
+        <p className="--font-sm">
+          To verify your account, check your email for verification link!
+        </p>
+      </div>
+
+      <button
+        className=" --primary-font-color verify-button "
+        onClick={() => dispatch(getSendVerificationEmail())}
+      >
+        {isLoading ? "Sending.." : "Resend Link"}
       </button>
     </section>
   );

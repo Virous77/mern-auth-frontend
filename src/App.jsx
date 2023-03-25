@@ -6,7 +6,6 @@ import {
   ForgetPassPage,
   ResetPassPage,
   ProfilePage,
-  VerifyPage,
 } from "./pages/index";
 import Navbar from "./components/Layout/Navbar";
 import Footer from "./components/Layout/Footer";
@@ -18,14 +17,25 @@ import { useGlobalContext } from "./components/store/globalContext";
 import { getUserStatus } from "./components/Redux/slices/authSlice/authThunk";
 import { useSelector, useDispatch } from "react-redux";
 import ProtectedUserLogin from "./components/PrivateRoutes/PrivateRoutes";
+import VerifyUser from "./components/Auth/VerifyUser";
 
 const App = () => {
-  const { notification, handleNotification } = useGlobalContext();
+  const { notification } = useGlobalContext();
   const dispatch = useDispatch();
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { isLoggedIn, user } = useSelector((state) => state.auth);
+
+  const validate = `${new Date(Date.now() + 1000 * 86400).getTime()}${
+    user?._id
+  }`;
+  const expiry = localStorage.getItem("authId");
+  const parseExpiry = expiry ? JSON.parse(expiry) : "";
 
   useEffect(() => {
     dispatch(getUserStatus());
+
+    if (parseExpiry === validate) {
+      localStorage.removeItem("authId");
+    }
   }, [isLoggedIn]);
 
   return (
@@ -46,7 +56,7 @@ const App = () => {
             </ProtectedUserLogin>
           }
         />
-        <Route path="/verify/:id" element={<VerifyPage />} />
+        <Route path="/VERIFY/:id" element={<VerifyUser />} />
       </Routes>
       {notification && <Notification />}
       <Footer />

@@ -2,13 +2,18 @@ import React, { useEffect, useState } from "react";
 import "./Profile.css";
 import ProfileForm from "./ProfileForm";
 import Image from "./Image";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useSelectUser } from "../Redux/slices/authSlice/authSlice";
+import { getUpdateUser } from "../Redux/slices/authSlice/authThunk";
+import { useGlobalContext } from "../store/globalContext";
+import Verify from "../Auth/Verify";
 
 const Profile = () => {
   const [userImage, setUserImage] = useState(null);
+  const [image, setImage] = useState(null);
   const [edit, setEdit] = useState(false);
   const user = useSelector(useSelectUser);
+  const { isLoading, message } = useSelector((state) => state.auth);
 
   const initialState = {
     name: user?.name,
@@ -18,11 +23,59 @@ const Profile = () => {
     verified: user?.isVerified,
   };
 
-  const [userData, setUserData] = useState(initialState);
+  const [userFormData, setUserData] = useState(initialState);
+
+  const dispatch = useDispatch();
+  const { handleNotification } = useGlobalContext();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUserData({ ...userData, [name]: value });
+    setUserData({ ...userFormData, [name]: value });
+  };
+
+  const cloud_name = import.meta.env.VITE_CLOUDINARY_NAME;
+  const cloud_preset = import.meta.env.VITE_CLOUDINARY_PRESET;
+
+  const handleSubmit = async () => {
+    let imageURL;
+
+    try {
+      if (image) {
+        const uploadImage = new FormData();
+
+        uploadImage.append("file", image);
+        uploadImage.append("cloud_name", cloud_name);
+        uploadImage.append("upload_preset", cloud_preset);
+
+        //save image to cloudinary
+
+        const res = await fetch(
+          `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+          {
+            method: "post",
+            body: uploadImage,
+          }
+        );
+        const imgData = await res.json();
+        imageURL = imgData?.url?.toString();
+      }
+
+      //update user to db
+      const userData = {
+        name: userFormData.name,
+        phone: userFormData.mobile,
+        bio: userFormData.bio,
+        photo: image ? imageURL : userImage,
+      };
+
+      dispatch(getUpdateUser(userData));
+      setEdit(false);
+    } catch (error) {
+      handleNotification({
+        message: error.message,
+        status: "error",
+      });
+    }
   };
 
   useEffect(() => {
@@ -37,8 +90,19 @@ const Profile = () => {
     setUserImage(user?.photo);
   }, [user]);
 
+  useEffect(() => {
+    if (message) {
+      handleNotification({
+        message,
+        status: message === " Verification email sent!" ? "success" : "error",
+      });
+    }
+  }, [message]);
+
   return (
     <>
+      {!user?.isVerified && <Verify />}
+
       <h2 className="--padding-up head-title">Profile</h2>
 
       <section className="profile">
@@ -46,6 +110,7 @@ const Profile = () => {
           <Image
             userImage={userImage}
             setUserImage={setUserImage}
+            setImage={setImage}
             edit={edit}
           />
           <div
@@ -65,7 +130,9 @@ const Profile = () => {
           edit={edit}
           setEdit={setEdit}
           handleChange={handleChange}
-          userData={userData}
+          userData={userFormData}
+          handleSubmit={handleSubmit}
+          isLoading={isLoading}
         />
       </section>
     </>

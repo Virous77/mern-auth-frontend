@@ -1,15 +1,18 @@
 import React from "react";
-import reetesh from "../../assets/reetesh.jpeg";
 
-const Image = ({ setUserImage, userImage, edit }) => {
+const Image = ({ setUserImage, userImage, edit, setImage }) => {
   const previewImage = (event) => {
     const targetFiles = event.target.files[0];
     setUserImage(URL.createObjectURL(targetFiles));
+    setImage(targetFiles);
   };
 
   return (
     <div className="image">
-      <img src={userImage || reetesh} alt="user-active" />
+      <img
+        src={userImage || "https://i.ibb.co/4pDNDk1/avatar.png"}
+        alt="user-active"
+      />
 
       {edit && (
         <div>

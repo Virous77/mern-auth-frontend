@@ -47,8 +47,12 @@ const Login = () => {
       dispatch(RESET());
     }
 
+    const validate = `${new Date(Date.now() + 1000 * 86400).getTime()}${
+      user?._id
+    }`;
+
     if (user) {
-      localStorage.setItem("authId", JSON.stringify(user._id));
+      localStorage.setItem("authId", JSON.stringify(validate));
     }
   }, [isError, isLoggedIn, dispatch, message, user]);
 
