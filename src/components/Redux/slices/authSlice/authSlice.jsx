@@ -8,6 +8,11 @@ import {
   getSendVerificationEmail,
   getVerifyUser,
   getChangePassword,
+  getForgetPassword,
+  getResetPassword,
+  getAllUsers,
+  getUpdateUserRole,
+  getDeleteUser,
 } from "./authThunk";
 
 const initialState = {
@@ -17,6 +22,7 @@ const initialState = {
   isError: false,
   isLoading: false,
   message: "",
+  mainLoading: false,
 };
 
 const authSlice = createSlice({
@@ -80,11 +86,16 @@ const authSlice = createSlice({
       })
 
       //get user status
+      .addCase(getUserStatus.pending, (state) => {
+        state.mainLoading = true;
+      })
       .addCase(getUserStatus.fulfilled, (state, action) => {
+        state.mainLoading = false;
         state.isLoggedIn = action.payload.status;
         state.user = action.payload.user ? action.payload.user : null;
       })
       .addCase(getUserStatus.rejected, (state, action) => {
+        state.mainLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
@@ -141,6 +152,76 @@ const authSlice = createSlice({
         state.message = action.payload;
       })
       .addCase(getChangePassword.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+
+      ///Forget password
+      .addCase(getForgetPassword.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getForgetPassword.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.message = action.payload;
+      })
+      .addCase(getForgetPassword.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+
+      //reset password
+      .addCase(getResetPassword.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getResetPassword.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.message = action.payload;
+      })
+      .addCase(getResetPassword.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+
+      ////get All Users
+      .addCase(getAllUsers.pending, (state) => {
+        state.mainLoading = true;
+      })
+      .addCase(getAllUsers.fulfilled, (state, action) => {
+        state.mainLoading = false;
+        state.users = action.payload;
+      })
+      .addCase(getAllUsers.rejected, (state, action) => {
+        state.mainLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+
+      ///Update User Role
+      .addCase(getUpdateUserRole.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getUpdateUserRole.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.message = action.payload;
+      })
+      .addCase(getUpdateUserRole.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+
+      //delete user
+      .addCase(getDeleteUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getDeleteUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.message = action.payload;
+      })
+      .addCase(getDeleteUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

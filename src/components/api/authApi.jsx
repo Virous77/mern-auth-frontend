@@ -47,6 +47,34 @@ export const changePassword = async (userData) => {
   return data.message;
 };
 
+export const forgetPassword = async (email) => {
+  const { data } = await axios.post(`${API_URL}/forgot-password`, email);
+  return data.message;
+};
+
+export const resetPassword = async (userData) => {
+  const { data } = await axios.patch(
+    `${API_URL}/reset-password/${userData.resetToken}`,
+    { password: userData.password }
+  );
+  return data.message;
+};
+
+export const allUsers = async () => {
+  const { data } = await axios.get(`${API_URL}/get-users`);
+  return data;
+};
+
+export const updateUserRole = async (userData) => {
+  const { data } = await axios.post(`${API_URL}/user-role`, userData);
+  return data.message;
+};
+
+export const deleteUser = async (id) => {
+  const { data } = await axios.delete(`${API_URL}/${id}`);
+  return data.message;
+};
+
 /////Email
 export const sendAutomatedEmail = async (emailData) => {
   const { data } = await axios.post(

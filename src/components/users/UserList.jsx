@@ -2,7 +2,7 @@ import React from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import UserRole from "./UserRole";
 
-const UserList = () => {
+const UserList = ({ searchUser, deleteUser }) => {
   return (
     <section className="user-table">
       <table>
@@ -16,25 +16,33 @@ const UserList = () => {
             <th>Action</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Reetesh Kumar</td>
-            <td>Sani546@gmail.com</td>
-            <td>Admin</td>
-            <td>
-              <UserRole />
-            </td>
-            <td>
-              <AiOutlineDelete
-                size={22}
-                cursor="pointer"
-                color="red"
-                className="delete"
-              />
-            </td>
-          </tr>
-        </tbody>
+
+        {searchUser?.length > 0 ? (
+          <tbody>
+            {searchUser?.map((user, idx) => (
+              <tr key={user._id}>
+                <td>{idx + 1}</td>
+                <td className="tdName">{user?.name}</td>
+                <td>{user?.email}</td>
+                <td>{user?.role}</td>
+                <td>
+                  <UserRole user={user} />
+                </td>
+                <td>
+                  <AiOutlineDelete
+                    size={22}
+                    cursor="pointer"
+                    color="red"
+                    className="delete"
+                    onClick={() => deleteUser(user?._id)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        ) : (
+          <p className="notFound">Users not found!</p>
+        )}
       </table>
     </section>
   );

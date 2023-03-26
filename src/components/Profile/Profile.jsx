@@ -7,13 +7,16 @@ import { useSelectUser } from "../Redux/slices/authSlice/authSlice";
 import { getUpdateUser } from "../Redux/slices/authSlice/authThunk";
 import { useGlobalContext } from "../store/globalContext";
 import Verify from "../Auth/Verify";
+import Loader from "../Layout/Loader/Loader";
 
 const Profile = () => {
   const [userImage, setUserImage] = useState(null);
   const [image, setImage] = useState(null);
   const [edit, setEdit] = useState(false);
   const user = useSelector(useSelectUser);
-  const { isLoading, message } = useSelector((state) => state.auth);
+  const { isLoading, message, mainLoading } = useSelector(
+    (state) => state.auth
+  );
 
   const initialState = {
     name: user?.name,
@@ -98,6 +101,8 @@ const Profile = () => {
       });
     }
   }, [message]);
+
+  if (mainLoading) return <Loader />;
 
   return (
     <>

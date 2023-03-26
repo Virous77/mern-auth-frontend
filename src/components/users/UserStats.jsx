@@ -1,8 +1,21 @@
 import React from "react";
 import { userStat } from "../../utils/function";
 
-const UserStats = () => {
+const UserStats = ({ users }) => {
   const pag = ["first", "second", "third", "fourth"];
+
+  const totalUsers = users?.length;
+  const verifiedUser = users?.filter(
+    (user) => user?.isVerified === true
+  )?.length;
+  const unVerifiedUser = users?.filter(
+    (user) => user.isVerified === false
+  )?.length;
+  const suspendedUser = users?.filter(
+    (user) => user.role === "suspend"
+  )?.length;
+
+  const data = [totalUsers, verifiedUser, unVerifiedUser, suspendedUser];
 
   return (
     <section className="statsMain">
@@ -15,7 +28,7 @@ const UserStats = () => {
 
           <div className="--flex-start --flex-direction  ">
             <span className="--margin-bottom-EL --font-sm">{item.name}</span>
-            <b>{item.id}</b>
+            <b>{data[idx]}</b>
           </div>
         </div>
       ))}

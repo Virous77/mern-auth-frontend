@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Password from "./Password";
 import { useDispatch, useSelector } from "react-redux";
-import { getChangePassword } from "../Redux/slices/authSlice/authThunk";
+import {
+  getChangePassword,
+  getResetPassword,
+} from "../Redux/slices/authSlice/authThunk";
 import { getSendAutomatedEmail } from "../Redux/slices/emailSlice/emailThunk";
 import { useGlobalContext } from "../store/globalContext";
+import { useParams, useNavigate } from "react-router-dom";
 
 const ResetPass = ({ title }) => {
   const initialState = {
@@ -17,12 +21,17 @@ const ResetPass = ({ title }) => {
   const { message: emailMsg } = useSelector((state) => state.email);
 
   const dispatch = useDispatch();
+  const { handleNotification } = useGlobalContext();
+  const { id } = useParams();
+  const navigate = useNavigate();
 
+  ///Handle state
   const handleChange = (e) => {
     const { name, value } = e.target;
     setResetData({ ...resetData, [name]: value });
   };
 
+  ////Change password
   const handlePasswordReset = () => {
     if (resetData.password !== resetData.confirmPassword) {
       handleNotification({
@@ -49,8 +58,33 @@ const ResetPass = ({ title }) => {
     dispatch(getSendAutomatedEmail(emailData));
   };
 
-  const { handleNotification } = useGlobalContext();
+  //////////Reset Password
+  const handlePasswordReset2 = () => {
+    if (!resetData.password || !resetData.confirmPassword) {
+      handleNotification({
+        message: "Password fields can't be empty!",
+        status: "error",
+      });
+      return;
+    }
 
+    if (resetData.password !== resetData.confirmPassword) {
+      handleNotification({
+        message: "Password don't match!",
+        status: "error",
+      });
+      return;
+    }
+
+    const userData = {
+      password: resetData.password,
+      resetToken: id,
+    };
+
+    dispatch(getResetPassword(userData));
+  };
+
+  ///Handle notification
   useEffect(() => {
     if (message) {
       handleNotification({
@@ -61,6 +95,11 @@ const ResetPass = ({ title }) => {
 
     if (message === "Password changed successful") {
       setResetData(initialState);
+    }
+
+    if (message === "Password reset successful!") {
+      setResetData(initialState);
+      navigate("/profile");
     }
 
     if (emailMsg) {
@@ -97,7 +136,13 @@ const ResetPass = ({ title }) => {
           value={resetData.confirmPassword}
           name="confirmPassword"
         />
-        <button className="onClick" type="button" onClick={handlePasswordReset}>
+        <button
+          className="onClick"
+          type="button"
+          onClick={
+            title === "profile" ? handlePasswordReset : handlePasswordReset2
+          }
+        >
           {isLoading ? "Processing" : "Reset Password"}
         </button>
       </form>
