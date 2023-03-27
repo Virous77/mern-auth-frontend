@@ -1,9 +1,12 @@
 import React from "react";
 import "./Home.css";
-import { useQuery } from "react-query";
 
 const Home = () => {
-  return <div>Home</div>;
+  return (
+    <main className="home">
+      <h1>Welcome to Virous</h1>
+    </main>
+  );
 };
 
 export default Home;
