@@ -3,7 +3,10 @@ import Auth from "./Auth";
 import { useGlobalContext } from "../store/globalContext";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../Redux/slices/authSlice/authThunk";
+import {
+  getSendLoginCode,
+  loginUser,
+} from "../Redux/slices/authSlice/authThunk";
 import { RESET } from "../Redux/slices/authSlice/authSlice";
 
 const Login = () => {
@@ -13,9 +16,8 @@ const Login = () => {
   });
 
   const { handleNotification } = useGlobalContext();
-  const { isLoading, isLoggedIn, message, isError, user } = useSelector(
-    (state) => state.auth
-  );
+  const { isLoading, isLoggedIn, message, isError, user, twoFactor } =
+    useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -47,6 +49,11 @@ const Login = () => {
       dispatch(RESET());
     }
 
+    if (twoFactor) {
+      dispatch(getSendLoginCode(loginData.email));
+      navigate(`/login-with-code/${loginData.email}`);
+    }
+
     const validate = `${new Date(Date.now() + 1000 * 86400).getTime()}${
       user?._id
     }`;
@@ -54,7 +61,7 @@ const Login = () => {
     if (user) {
       localStorage.setItem("authId", JSON.stringify(validate));
     }
-  }, [isError, isLoggedIn, dispatch, message, user]);
+  }, [isError, isLoggedIn, dispatch, message, user, twoFactor]);
 
   return (
     <Auth

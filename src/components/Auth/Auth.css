@@ -53,6 +53,18 @@
   cursor: pointer;
 }
 
+.resend {
+  display: block;
+  color: white;
+  background-color: rgb(1, 167, 1);
+  width: fit-content;
+  margin: auto;
+  padding: 3px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
 .forgetPass {
   align-self: flex-end;
   margin-top: -0.7rem;

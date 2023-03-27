@@ -83,3 +83,16 @@ export const sendAutomatedEmail = async (emailData) => {
   );
   return data.message;
 };
+
+export const sendLoginCode = async (email) => {
+  const { data } = await axios.post(`${API_URL}/send-login-code/${email}`);
+  return data.message;
+};
+
+export const loginWithCode = async (userData) => {
+  const { data } = await axios.post(
+    `${API_URL}/login-with-code/${userData.email}`,
+    { loginCode: userData.loginCode }
+  );
+  return data;
+};

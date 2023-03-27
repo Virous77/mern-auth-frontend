@@ -13,6 +13,8 @@ import {
   allUsers,
   updateUserRole,
   deleteUser,
+  sendLoginCode,
+  loginWithCode,
 } from "../../../api/authApi";
 
 export const registerUser = createAsyncThunk(
@@ -201,6 +203,36 @@ export const getDeleteUser = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       return await deleteUser(id);
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getSendLoginCode = createAsyncThunk(
+  "auth/getSendLoginCode",
+  async (email, thunkAPI) => {
+    try {
+      return await sendLoginCode(email);
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getLoginWithCode = createAsyncThunk(
+  "auth/getLoginWithCode",
+  async (userData, thunkAPI) => {
+    try {
+      return await loginWithCode(userData);
     } catch (error) {
       const message =
         error.response && error.response.data.message

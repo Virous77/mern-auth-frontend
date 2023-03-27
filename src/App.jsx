@@ -57,6 +57,7 @@ const App = () => {
           }
         />
         <Route path="/VERIFY/:id" element={<VerifyUser />} />
+        <Route path="/login-with-code/:email" element={<LoginCode />} />
       </Routes>
       {notification && <Notification />}
       <Footer />

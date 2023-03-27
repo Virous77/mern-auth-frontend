@@ -13,6 +13,8 @@ import {
   getAllUsers,
   getUpdateUserRole,
   getDeleteUser,
+  getSendLoginCode,
+  getLoginWithCode,
 } from "./authThunk";
 
 const initialState = {
@@ -23,6 +25,7 @@ const initialState = {
   isLoading: false,
   message: "",
   mainLoading: false,
+  twoFactor: false,
 };
 
 const authSlice = createSlice({
@@ -62,7 +65,15 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isLoggedIn = true;
-        state.user = action.payload;
+
+        if (
+          action.payload?.message?.includes("Check your email for login code.")
+        ) {
+          state.twoFactor = true;
+          state.message = action.payload.message;
+        } else {
+          state.user = action.payload;
+        }
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -222,6 +233,36 @@ const authSlice = createSlice({
         state.message = action.payload;
       })
       .addCase(getDeleteUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+
+      //send Login code
+      .addCase(getSendLoginCode.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getSendLoginCode.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.message = action.payload;
+      })
+      .addCase(getSendLoginCode.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+
+      ///Login With Code
+      .addCase(getLoginWithCode.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getLoginWithCode.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isLoggedIn = true;
+        state.twoFactor = false;
+        state.user = action.payload;
+      })
+      .addCase(getLoginWithCode.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
